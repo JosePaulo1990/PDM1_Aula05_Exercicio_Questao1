@@ -2,46 +2,34 @@ package com.example.pdm1_aula05_exercicio_questao1
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.example.pdm1_aula05_exercicio_questao1.ui.theme.PDM1_Aula05_Exercicio_Questao1Theme
+import android.widget.EditText
 
 class MainActivity : ComponentActivity() {
+    private lateinit var editText: EditText
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContent {
-            PDM1_Aula05_Exercicio_Questao1Theme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
-            }
+        setContentView(R.layout.activity_main)
+
+        editText = findViewById(R.id.editTextNome)
+
+        // Restaurar o estado do EditText, se houver
+        savedInstanceState?.let {
+            val textoSalvo = it.getString("nome")
+            editText.setText(textoSalvo)
         }
     }
-}
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        // Salvar o conteúdo do EditText antes da Activity ser destruída
+        outState.putString("nome", editText.text.toString())
+    }
 
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    PDM1_Aula05_Exercicio_Questao1Theme {
-        Greeting("Android")
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+        // Recuperar o conteúdo salvo e colocar no EditText
+        val textoSalvo = savedInstanceState.getString("nome")
+        editText.setText(textoSalvo)
     }
 }
